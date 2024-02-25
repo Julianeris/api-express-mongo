@@ -1,7 +1,6 @@
-import app from "./src/app.js";
-
-const PORT = 3000;
-
-app.listen(PORT, () => {
-    console.log("servidor escutando!");
-  });
+require('dotenv').config();
+const http = require('http');
+const app = require('./src/app');
+const port = process.env.PORT || 3000;
+const server = http.createServer(app);
+server.listen(port);
