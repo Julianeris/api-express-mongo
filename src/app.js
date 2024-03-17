@@ -1,21 +1,23 @@
-const express = require('express');
-const conectaNaDatabase = require ('./config/dbConnect');
-const routes = require ('./routes/index.js');
+const express = require("express");
+const conectaNaDatabase = require ("./config/dbConnect");
+const routes = require ("./routes/index.js");
+const mapinuladorDeErros = require("./middlewares/mainupadorDeErros.js");
+const manipulador404 = require("./middlewares/manipulador404.js");
 
 async function inicializaApp() {
-    try {
-      const conexao = await conectaNaDatabase();
-      conexao.on('error', (erro) => {
-        console.error('Erro de conexão', erro);
-      });
+  try {
+    const conexao = await conectaNaDatabase();
+    conexao.on("error", (erro) => {
+      console.error("Erro de conexão", erro);
+    });
   
-      conexao.once('open', () => {
-        console.log('conexão feita com sucesso');
-      });
+    conexao.once("open", () => {
+      console.log("conexão feita com sucesso");
+    });
     
-    } catch (error) {
-      console.error('Erro ao inicializar o aplicativo', error);
-    }
+  } catch (error) {
+    console.error("Erro ao inicializar o aplicativo", error);
+  }
 }
   
 inicializaApp();
@@ -23,10 +25,9 @@ inicializaApp();
 const app = express();
 routes(app);
 
-app.delete("/livros/:id", (req, res) => {
-    const index = buscaLivro(req.params.id);
-    livros.splice(index, 1);
-    res.status(200).send('Livro deletado')
-})
+app.use(manipulador404);
+
+// eslint-disable-next-line no-unused-vars
+app.use(mapinuladorDeErros);
 
 module.exports = app;
